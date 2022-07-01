@@ -1,0 +1,22 @@
+html,body {
+  margin: 0px !important;
+  padding: 0px !important;
+  background:red;
+  overflow: hidden;
+   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+   -webkit-tap-highlight-color: transparent;
+   -webkit-user-select: none;
+   -khtml-user-select: none;
+   -moz-user-select: none;
+   -ms-user-select: none;
+    user-select: none;
+}
+
+#container {
+	position: relative;
+	top: 10px;
+}
+
+#container3d canvas {
+	position: absolute;
+}
