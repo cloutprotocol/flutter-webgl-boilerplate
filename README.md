@@ -1,4 +1,4 @@
-# Flutter WebGL by cloutcoin
+# Flutter WebGL
 ## three.js + WebViewPlus +  webViewController
 
 ## Getting Started
@@ -6,15 +6,14 @@ This project is a starting point for a Flutter application using WebViewPlus to 
 
 ## credits
 ### starter
-webview_flutter_plus_example by @shah-xad
+#### webview_flutter_plus_example by @shah-xad
 https://github.com/shah-xad/webview_flutter_plus/tree/master/example
 
 ### three.js scene
-WebGL Test by @russellbeattie  
+#### WebGL Test by @russellbeattie  
 https://codepen.io/russellbeattie/pen/kGxaqM
 
 # Execution
-
 #### WebViewPlus with Javascript Listener
 ```dart
 WebViewPlus(
