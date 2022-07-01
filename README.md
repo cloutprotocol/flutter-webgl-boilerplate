@@ -2,10 +2,10 @@
 ## three.js + WebViewPlus +  webViewController
 
 ## Getting Started
-This project is a starting point for a Flutter application using WebViewPlus to render a local three.js scene while sending and recieving javascript responses via controller.webViewController.evaluateJavascript event.
+This project is a starting point for a Flutter application using WebViewPlus to render a local three.js scene while sending and recieving javascript responses via evaluateJavascript event.
 
 ## credits
-### base project
+### starter
 webview_flutter_plus_example by @shah-xad
 https://github.com/shah-xad/webview_flutter_plus/tree/master/example
 
@@ -17,7 +17,7 @@ https://codepen.io/russellbeattie/pen/kGxaqM
 
 #### WebViewPlus with Javascript Listener
 ```dart
-            child: WebViewPlus(
+WebViewPlus(
 initialUrl: 'assets/tron/index.html',
 onWebViewCreated: (controller) {
 this.controller = controller;
