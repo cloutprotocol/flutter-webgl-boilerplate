@@ -105,7 +105,7 @@ html,body {
 - [x] improve highlighting of WebView on long press
 - [x] flutter event to javascript function (controller)
 - [x] add basic router
-- [x] disable flasshing of webview (backgroundColor: Colors.transparent)
+- [x] disable flashing of webview (backgroundColor: Colors.transparent)
 
 
 ### ToDo
