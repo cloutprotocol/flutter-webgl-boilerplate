@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html lang="en-AU">
+<head>
+
+	<title>Anime.js + Three.js</title>
+
+	<meta name="description" content="
+
+	A basic demonstration of using Anime.js for tweening animations in Three.js.
+
+	">
+
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="mobile-web-app-capable" content="yes" >
+	<meta name="theme-color" content="#000">
+	<meta name="author" content="Henry Egloff">
+
+<!--	<link rel="preconnect" href="https://fonts.googleapis.com">-->
+<!--    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>-->
+<!--    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@350&display=swap" rel="stylesheet">-->
+<!--	<link rel="icon" type="image/x-icon" href="../_icons/favicon.ico" >-->
+	
+	<style>
+
+		* {
+		    font-family: 'Roboto Mono', monospace;
+		    font-weight: 350;
+		}
+			
+		html {
+		    min-height: 100%;
+		    display: flex;
+		    flex-direction: column;
+		}
+
+
+		body {
+		    margin: 0;
+		    flex-grow: 1;
+		    overflow: hidden;
+		    line-height: 1.5;
+		    text-align: center;
+		    background: linear-gradient(155deg, #eee 20%, #ccc);
+		    color:  #fff;
+		}
+
+		#spotify{
+			position:absolute;
+			bottom:20px;
+			margin:0px auto;
+			width:100%;
+		}
+
+
+		#threejs-canvas {
+		    opacity: 0;
+		    transition: opacity 2s;
+		}
+
+		[loaded] #threejs-canvas {
+		    opacity: 1;
+		}
+
+
+		/* Loader
+		-----------------------*/
+
+		#loader {
+		    width:  120px;
+		    height:  120px;
+		    color:  #fff;
+		    position: absolute;
+		    top: calc(50% - 60px);
+		    left: calc(50% - 60px);
+		    opacity: 0;
+		    pointer-events: none;
+		    transition: .5s;
+		}
+
+		[loading] #loader {
+		    opacity: 1;
+		}
+
+		@keyframes pulse {
+		    0%      {opacity: 1}
+		    50%     {opacity: .2}
+		    100%    {opacity: 1}
+		}
+
+		#loader p {
+		    padding-top: 5em;
+		    animation:  pulse 1.25s infinite;
+		    animation-timing-function: ease-in-out;
+		    animation-delay: 2s;
+		    text-transform: uppercase;
+		    font-size: .75em;
+		    letter-spacing: 2px;
+		    color:  #111;
+		}
+
+		.cube-animation {
+		    display: inline-block;
+		    perspective: 60px;
+		    width: 120px;
+		    height: 120px;
+		    transition: .5s;
+		    transition-timing-function: ease-out;
+		}
+
+		[loaded] .cube-animation {
+		    transform:  scale(1.75);
+		}
+
+		.cube {
+		    width: 100%;
+		    height: 100%;
+		    transform-style: preserve-3d;
+		    transform: rotateX(-15deg) rotateY(15deg);
+		    animation: rotate 5s infinite linear;
+		}
+
+		.cube div {
+		    position: absolute;
+		    padding:  15%;
+		    box-sizing: border-box;
+		    width: 100%;
+		    height: 100%;
+		    animation: scale_side 1s infinite ease-in-out;
+		}
+
+		.cube span {
+		    background: rgba(0, 0, 0, .8);
+		    width:  100%;
+		    height:  100%;
+		    display: inline-block;
+		}
+
+		.front {
+		    transform: translate3d(0, 0, 60px);
+		}
+
+		.back {
+		    transform: rotateY(180deg) translate3d(0, 0, 60px);
+		}
+
+		.top {
+		    transform: rotateX(90deg) translate3d(0, 0, 60px);
+		}
+
+		.bottom {
+		    transform: rotateX(-90deg) translate3d(0, 0, 60px);
+		}
+
+		.left, .right {
+		    left: 50%;
+		    margin-left: -60px;
+		}
+
+		.left {
+		    transform: rotateY(-90deg) translate3d(0, 0, 60px);
+		}
+
+		.right {
+		    transform: rotateY(90deg) translate3d(0, 0, 60px);
+		}
+
+
+		@keyframes rotate {
+		    0% {
+		        transform: rotateY(0deg) rotateX(0deg);
+		    }
+		    100% {
+		        transform: rotateY(-360deg) rotateX(-360deg);
+		    }
+		}
+
+		@keyframes scale_side {
+		    0% {
+		        padding:  15%;
+		    }
+		    50% {
+		        padding:  25%;
+		    }
+		    100% {
+		        adding:  15%;
+		    }
+		}
+
+		/* Fullscreen Button 
+		------------------------------*/
+
+		#fullscreen-button {
+			position: absolute;
+			top:  15px;
+			right:  15px;
+			background: rgba(255,255,255,0);
+			border:  0;
+			width:  40px;
+			height:  40px;
+			border-radius: 50%;
+			box-sizing: border-box;
+			transition:  transform .3s;
+			font-size: 0;
+			cursor:  pointer;
+			opacity: 0;
+			pointer-events: none;
+			transition: opacity .3s, transform .3s;
+		}
+
+		[ui] #fullscreen-button {
+			opacity: 1;
+			pointer-events: auto;
+		}
+
+		#fullscreen-button:hover {
+			transform: scale(1.125);
+		}
+
+		#fullscreen-button span {
+			width:  4px;
+			height:  4px;
+			border-top:  2.5px solid #fff;
+			border-left:  2.5px solid #fff;
+			position: absolute;
+			outline: 1px solid transparent;
+			-webkit-backface-visibility: hidden;
+			transform: translateZ(0);
+			will-change: transform;
+			-webkit-perspective: 1000;
+			transition:  .3s;
+			transition-delay: .75s;
+		}
+
+		#fullscreen-button span:nth-child(1) {
+			top: 11px;
+			left: 11px;
+		}
+
+		#fullscreen-button span:nth-child(2) {
+			top: 11px;
+			left: 22px;
+			transform: rotate(90deg);
+		}
+
+		#fullscreen-button span:nth-child(3) {
+			top: 22px;
+			left: 11px;
+			transform: rotate(-90deg);
+		}
+
+		#fullscreen-button span:nth-child(4) {
+			top: 22px;
+			left: 22px;
+			transform: rotate(-180deg);
+		}
+
+
+
+		/* Fullscreen True
+		------------------------------*/
+
+		[fullscreen] #fullscreen-button span:nth-child(1) {
+			top: 22px;
+			left: 22px;
+		}
+
+		[fullscreen] #fullscreen-button span:nth-child(2) {
+			top: 22px;
+			left: 11px;
+		}
+
+		[fullscreen] #fullscreen-button span:nth-child(3) {
+			top: 11px;
+			left: 22px;
+		}
+
+		[fullscreen] #fullscreen-button span:nth-child(4) {
+			top: 11px;
+			left: 11px;
+		}
+
+
+
+		/* Light Version
+		------------------------------*/
+
+		#fullscreen-button {
+			background: rgba(255,255,255,.4);
+		}
+
+		#fullscreen-button span {
+			border-top:  2.5px solid #333;
+			border-left:  2.5px solid #333;
+		}
+
+	</style>
+
+</head>
+
+<body>
+
+	<div id="threejs-canvas" class="screen"></div>
+
+	<div id="loader">
+        <div class="cube-animation">
+            <div class="cube">
+                <div class="front"><span></span></div>
+                <div class="back"><span></span></div>
+                <div class="top"><span></span></div>
+                <div class="bottom"><span></span></div>
+                <div class="left"><span></span></div>
+                <div class="right"><span></span></div>
+            </div>
+        </div>
+        <p>{ loading }</p>
+    </div>
+	<div id="spotify"><iframe style="border-radius:1px" src="https://open.spotify.com/embed/track/2BJMcB43K76701x8djS5sI?utm_source=generator" width="300" height="80" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"></iframe></div>
+
+
+	<script>
+		
+		setTimeout( () => {
+            if (!document.body.hasAttribute("loaded")) { 
+                 document.body.setAttribute("loading","")
+            } 
+        }, 1000)
+
+	</script>
+
+	<!-- Import maps polyfill (remove when widely supported -->
+<!--	<script async src="https://unpkg.com/es-module-shims@1.3.6/dist/es-module-shims.js"></script>-->
+
+	<script type="importmap">
+	  	{
+	    	"imports": {
+	    		"three": "https://unpkg.com/three@0.139.0/build/three.module.js"
+	    	}
+	  	}
+	</script>
+
+
+	<script type="module">
+
+		import * as THREE from 'three';
+		import { OrbitControls } from 'https://unpkg.com/three@0.139.0/examples/jsm/controls/OrbitControls.js';
+		import anime from './anime.es.js'; // https://animejs.com/
+
+		let scene, camera, renderer, controls;
+	
+
+		init();
+
+		function init() {
+
+			scene = new THREE.Scene();
+
+			camera = new THREE.PerspectiveCamera(25, window.innerWidth / window.innerHeight, 0.1,1000);
+			camera.position.set(0,1.5,-12);
+
+			renderer = new THREE.WebGLRenderer({ antialias:true, alpha: true });
+			renderer.setPixelRatio(window.devicePixelRatio);
+			renderer.setSize(window.innerWidth, window.innerHeight);
+			renderer.shadowMap.enabled = true;
+			renderer.shadowMap.type = THREE.VSMShadowMap
+			renderer.outputEncoding = THREE.sRGBEncoding;
+			renderer.setAnimationLoop( animation );
+			
+			let threejs_canvas = document.getElementById("threejs-canvas")
+    		threejs_canvas.appendChild(renderer.domElement)
+
+			controls = new OrbitControls(camera, renderer.domElement);
+		    controls.target = new THREE.Vector3(0, 1.5, 0);
+		    controls.enableDamping = true;
+		    controls.maxPolarAngle = Math.PI/2
+		    controls.minDistance = 2
+            controls.maxDistance = 30
+            controls.enablePan = false
+		    
+
+		    // Directional (Key) Light
+
+		    const directional_light = new THREE.DirectionalLight( 0xffffff, 0.8 )
+			directional_light.position.set( 0, 5, 0 )
+			directional_light.castShadow = true
+			directional_light.shadow.mapSize.width = 1024
+			directional_light.shadow.mapSize.height = 1024
+			directional_light.shadow.camera.far = 24
+			directional_light.shadow.radius = 5
+			directional_light.shadow.bias = - 0.00006
+			scene.add( directional_light )
+
+
+			// Hemisphere (Fill) Light
+
+			const hemisphere_light = new THREE.HemisphereLight( 0xffffff, 0x000000, 0.2 );
+			hemisphere_light.position.set( 0, 6, 0 );
+			scene.add( hemisphere_light );
+
+
+			// Materials
+
+			const white_material = new THREE.MeshPhongMaterial({color: 0xffffff,});
+			const shadow_material = new THREE.ShadowMaterial({opacity: 0.3});
+
+
+			// Ground Plane
+
+			const ground_geometry = new THREE.PlaneGeometry(20, 20);
+			const ground = new THREE.Mesh(ground_geometry, shadow_material);
+			ground.receiveShadow = true;
+			ground.rotateX(-Math.PI / 2);
+			scene.add(ground);
+
+
+			// Icosahedron
+
+			const icosahedron_geometry = new THREE.IcosahedronGeometry(1);
+			const icosahedron = new THREE.Mesh( icosahedron_geometry, white_material );
+			icosahedron.position.y = 1.5;
+			icosahedron.castShadow = true;
+			scene.add(icosahedron);
+
+
+			// Anime Tweening
+
+			anime({
+			  	targets: [icosahedron.position],
+			    y: 1.5,
+			    easing: "easeInOutSine",
+			    duration: 3000,
+			    direction: "alternate",
+			    loop: true
+			});
+
+			anime({
+			    targets: [icosahedron.rotation],
+			    y: 1, x: 2, z: 3,
+			    easing: "easeInOutSine",
+			    duration: 5000,
+			    direction: "alternate",
+			    loop: true
+			});
+
+			anime({
+			    targets: [icosahedron.scale],
+			    x: 1.25, y: 1.25, z: 1.25,
+			    easing: "easeInOutSine",
+			    duration: 2000,
+			    direction: "alternate",
+			    loop: true
+			});
+
+		}
+
+
+		// Animation
+
+		function animation(time) {
+		    controls.update();
+		    renderer.render(scene, camera);   
+		}
+
+
+		// Window Resize
+
+	    window.addEventListener('resize', () => {
+	        camera.aspect = window.innerWidth / window.innerHeight
+	        camera.updateProjectionMatrix()
+	        renderer.setSize(window.innerWidth, window.innerHeight)
+	    })
+
+
+		// UI Timer
+
+	    const ui_timer = function () {
+
+	        let time;
+	        document.onmousemove = resetTimer;
+	        document.ontouchmove = resetTimer;
+	        document.onkeydown = resetTimer;
+
+	        function timeout() {
+	            document.body.removeAttribute("ui");
+	        }
+
+	        function resetTimer() {
+	            clearTimeout(time);
+	            document.body.setAttribute("ui","");
+	            time = setTimeout(timeout, 3000);
+	        }
+	    };
+
+
+
+	    // Fullscreen button
+
+		if (document.fullscreenEnabled || document.webkitFullscreenEnabled || 
+		  	document.msFullscreenEnabled ) {
+			create_fullscreen_button();
+		}
+
+
+		function create_fullscreen_button() {
+
+			let fullscreen_button = document.createElement("button");
+			fullscreen_button.setAttribute('id','fullscreen-button');
+			fullscreen_button.addEventListener("click", toggle_fullscreen);
+
+			fullscreen_button.innerHTML  = `
+				<span></span>
+				<span></span>
+				<span></span>
+				<span></span>
+			`;
+
+			document.body.appendChild(fullscreen_button);
+
+		}
+
+
+		function toggle_fullscreen() {
+
+			 if (!document.fullscreenElement && !document.mozFullScreenElement && !document.webkitFullscreenElement) {  
+		        if (document.documentElement.requestFullscreen) {
+		            document.documentElement.requestFullscreen()
+		        } else if (document.documentElement.mozRequestFullScreen) {
+		            document.documentElement.mozRequestFullScreen()
+		        } else if (document.documentElement.webkitRequestFullscreen) {
+		            document.documentElement.webkitRequestFullscreen(Element.ALLOW_KEYBOARD_INPUT)
+		        }
+
+		        document.body.setAttribute("fullscreen","") 
+
+		    } else {
+		        if (document.cancelFullScreen) {
+		            document.cancelFullScreen()
+		        } else if (document.mozCancelFullScreen) {
+		            document.mozCancelFullScreen()
+		        } else if (document.webkitCancelFullScreen) {
+		            document.webkitCancelFullScreen()
+		        }
+
+		        document.body.removeAttribute("fullscreen") 
+
+		    }
+			    		
+		}
+
+
+		function check_fullscreen() {
+
+	        // Because users can exit & enter fullscreen differently
+
+	        if (document.fullscreenElement !== null) { 
+	            document.body.setAttribute("fullscreen","") 
+	        }
+
+	        else  { 
+	            document.body.removeAttribute("fullscreen") 
+	        }
+	    }
+
+	    setInterval(function(){ check_fullscreen();}, 1000); 
+
+
+
+		// Loading
+
+    	window.onload = function () {
+	        ui_timer()
+	        document.body.removeAttribute("loading")
+	        document.body.setAttribute("loaded","")
+	    }
+
+
+
+	</script>
+
+</body>
+
+</html>

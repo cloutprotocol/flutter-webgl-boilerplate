@@ -1,0 +1,25 @@
+
+{
+  "name": "PWA Template",
+  "short_name": "PWA Template",
+  "description": "A Basic PWA Template.",
+  "default_locale": "en",
+  "start_url": "./index.html",
+  "scope": "./",
+  "background_color": "#000",
+  "theme_color": "#000",
+  "display": "standalone",
+  "icons": [{
+      "src": "./icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }],
+  "developer": {
+    "name": "Henry Egloff",
+    "url": "https://henryegloff.com"
+  },
+  "installs_allowed_from": [
+    "*"
+  ]
+}

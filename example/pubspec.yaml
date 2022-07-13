@@ -15,14 +15,13 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-
+  google_maps_flutter: ^2.0.0
+  geolocator: ^9.0.0
   cupertino_icons: ^1.0.2
   webview_flutter: ^3.0.0
   webview_flutter_plus: ^0.3.0+2
   path_provider: ^2.0.11
   mime: ^1.0.2
-
-
 
 dev_dependencies:
   flutter_test:
@@ -48,7 +47,41 @@ flutter:
 
   # To add assets to your application, add an assets section, like this:
   assets:
+    - assets/
+    - assets/www/
+    - lib/screens/googlemap/
+
+
+    #   /tron screen
     - assets/tron/
+
+#   /pwa screen
+    - assets/www/pwa/
+
+#   /pwa screen
+    - assets/www/decision-maker/
+
+#   /pwa screen
+    - assets/www/astro/
+
+#   /pwa screen
+    - assets/www/animejs/
+    - assets/www/animejs/anime.es.js
+
+
+    #   /mobiletouch screen
+    - assets/touch/
+    - assets/touch/css/
+    - assets/touch/images/
+    - assets/touch/js/
+    - assets/touch/js/libs/
+    - assets/touch/js/libs/threejs/
+    - assets/touch/model/
+
+#      heart
+    - assets/www/heart/
+
+
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see

@@ -1,0 +1,24 @@
+{
+  "name": "Decision Maker Pro",
+  "short_name": "Decision Maker Pro",
+  "description": "Make decisions with ease. 100% free decision maker app.",
+  "default_locale": "en",
+  "start_url": "https://henryegloff.com/decision-maker/index.html",
+  "scope": "https://henryegloff.com/decision-maker/",
+  "background_color": "#141516",
+  "theme_color": "#141516",
+  "display": "standalone",
+  "icons": [{
+      "src": "https://henryegloff.com/decision-maker/icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }],
+  "developer": {
+    "name": "Henry Egloff",
+    "url": "https://henryegloff.com"
+  },
+  "installs_allowed_from": [
+    "*"
+  ]
+}

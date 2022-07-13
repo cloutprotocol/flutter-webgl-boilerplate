@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>Decision Maker Pro</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Make decisions with ease. 100% free decision maker app.">	
+<meta name="keywords" content="Decision Maker App">
+<meta name="author" content="Henry Egloff">
+<meta content="yes" name="mobile-web-app-capable">
+<meta content="yes" name="apple-mobile-web-app-capable">
+<meta content="#141516" name="theme-color">
+<meta content="#141516" name="msapplication-TileColor">
+<meta content="#141516" name="apple-mobile-web-app-status-bar-style">
+
+<meta charset="UTF-8">
+
+<meta property="og:title" content="Decision Maker Pro">
+<meta property="og:site_name" content="Decision Maker Pro">
+<meta property="og:url" content="https://henryegloff.com/decision-maker">
+<meta property="og:description" content="Make decisions with ease. 100% free decision maker app.">
+<meta property="og:type" content="website">
+<meta property="og:image" content="https://henryegloff.com/decision-maker/decision-maker-app.jpg">
+
+
+<script type="application/ld+json">
+    {
+      "@context" : "http://schema.org",
+      "@type" : "SoftwareApplication",
+      "name" : "Decision Maker Pro",
+      "image" : "https://henryegloff.com/decision-maker",
+      "author" : {
+        "@type" : "Person",
+        "name" : "Henry Egloff"
+      },
+      "downloadUrl" : "https://henryegloff.com/decision-maker"
+    }
+</script>
+
+<link href="https://henryegloff.com/decision-maker/favicon.ico" rel="icon" type="image/x-icon">
+<link href="https://henryegloff.com/decision-maker/manifest.json" rel="manifest"> 
+<link href="https://henryegloff.com/decision-maker/apple-touch-icon.png" rel="apple-touch-icon">
+
+<link rel="preconnect" href="https://fonts.gstatic.com">
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" 
+media="print" onload="this.onload=null;this.removeAttribute('media');">
+<noscript>
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap">
+</noscript>
+
+<link rel="preload" href="https://henryegloff.com/decision-maker/audio-blip.mp3" as="audio" type="audio/mp3">
+<link rel="preload" href="https://henryegloff.com/decision-maker/audio-ting.mp3" as="audio" type="audio/mp3">
+
+<style>
+
+	* { font-family: 'Inter', sans-serif; }
+
+	body {
+		text-align: center;
+		color:#fff;
+		font-weight: 400;
+		font-size: 16px;
+		margin:0;
+		transition: background-color .3s;
+    background: #141516;
+    animation: fade-on 1s;
+	}
+	
+	.container {
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		align-items: center;
+		width: 100%;
+		min-height: 100vh;
+		position: absolute;
+		top: 0;
+    
+	}
+
+	h1 {
+		font-size: 1.438rem;
+		font-style:normal;
+		font-weight: 600;
+	}
+
+	h2 {
+		font-style:normal;
+		font-size: 1.135em;
+		font-weight: 400;
+	}
+
+	.answers {
+		list-style: none;
+		padding: 0;
+		font-size: 1.25em;
+		font-weight: 400;
+		line-height: 1.75;
+	}
+	
+	.answers li {
+		opacity: .25;
+	}
+	
+	.answers li[state=on] {
+		animation: fade-on-off .3s;
+	}
+
+	.answers li[state=selected] {
+		opacity: 1;
+		font-weight: 600;
+	}
+
+  @keyframes fade-on {
+	  0%   { opacity: 0; }
+	  100% { opacity: 1; }
+	}
+
+	@keyframes fade-on-off {
+	  0%   { opacity: 0; }
+	  15% { opacity: 1; }
+	  85% { opacity: 1; }
+	  100% { opacity: 0; }
+	}
+	
+	#ask-button {
+		border: 0;
+		border-radius: 2em;
+	 	cursor: pointer; 
+		padding: .6em 1.5em; 
+		background: rgba(255,255,255,.1); 
+		font-size: 1.313em;
+		font-style: normal;
+		font-weight: 500;
+		color: rgba(255,255,255,1);
+		border: 1px solid rgba(255,255,255,1);
+		margin-top: .5em;
+		outline:none;
+		transition: transform .3s, opacity .3s, border .3s;
+		text-shadow: 0px 1px 10px rgba(0,0,0,.05); 
+  	}
+	
+	#ask-button:focus {
+		border: 1px solid rgba(255,255,255,1);
+		transform: scale(1.125);
+	}
+	
+	#ask-button:hover {
+		transform: scale(1.125);
+		border: 1px solid rgba(255,255,255,1);
+	}
+
+	#ask-button[state=disabled] {
+		pointer-events: none;
+		opacity: .2;
+	}
+	
+
+	a {
+		color: #fff;
+		text-decoration: none;
+		opacity: 1;
+		transition: opacity .3s, border .3s;
+		padding: .5em .5em;
+		border: 1px solid rgba(255,255,255,.0);
+		outline:none;
+		border-radius: .5em;
+	}
+	
+	a:hover {
+		opacity:.5	;	
+	}
+	
+	a:focus {
+		border: 1px solid rgba(255,255,255,.75);
+	}
+	
+	footer {
+		font-size: 0.75rem;
+		margin-top: 2em;
+		line-height: 1.5;
+	}
+	
+	.disclaimer {
+		font-size: 0.813em;
+		margin-top: .5em;
+		display: inline-block;
+	}
+	
+	@media only screen and (min-width: 520px) and (min-height: 900px) {
+	  body {
+	    font-size: 17px;
+	  }
+	}
+
+	@media only screen and (min-width: 620px) and (min-height: 900px) {
+	  body {
+	    font-size: 18px;
+	  }
+	   .answers {
+	  	font-size: 1.5em;
+	  }
+	  footer {
+        margin-top: 3em;
+	  }
+	  h1 {
+	  	margin-bottom: 1.25em;
+
+	  }
+	}
+
+	@media only screen and (min-width: 720px) and (min-height: 900px) {
+	  body {
+	    font-size: 19px;
+	  }
+	  h1 {
+	  	font-size: 1.75rem;
+	  }
+	  
+	}
+
+	@media only screen and (min-width: 820px) and (min-height: 900px) {
+	  body {
+	    font-size: 20px;
+	  }
+	}
+
+	@media only screen and (min-width: 920px) and (min-height: 900px) {
+	  body {
+	    font-size: 21px;
+	  }
+	}
+
+	@media only screen and (min-width: 1020px) and (min-height: 900px) {
+	  body {
+	    font-size: 22px;
+	  }
+	}
+
+	#settings-button {
+		outline:none;
+	    border-radius: 5px;
+	    border: 0;
+	    border: 1px solid rgba(255,255,255,0);
+	    font-size: 1.25em;
+	    width: 40px;
+	    height: 40px;
+	    text-align: center;
+	    transition: .3s;
+	   	padding: 0;
+	    position: fixed;
+	    top: 2em;
+	    left: .5em;
+	    background: none;
+	    cursor: pointer;
+	    z-index: 2;
+	    margin:0;
+	    opacity: .3;
+	}
+
+	#settings-button:hover {
+	    fill: rgba(255,255,255,1);
+	    opacity: 1;
+	    transform: scale(1.125);
+	}
+
+	#settings-button:focus {
+	    border: 1px solid rgba(255,255,255,0);
+	    opacity: 1;
+	    transform: scale(1.125);
+	}
+
+	#settings-button svg {
+		width: 30px;
+	    height: 30px;
+	    padding: 5px;
+	    fill: rgba(255,255,255,1);
+	}
+
+
+
+	#app {
+		opacity: 1;
+		pointer-events: auto;
+	}
+
+	body[screen="settings"] #app {
+	    opacity: 0;
+	    pointer-events: none;
+	}
+
+
+
+	#settings {
+		opacity: 0;
+	    height: 100%;
+	    min-height: 580px;
+	    overflow: hidden;
+	    pointer-events: none;
+	    transition: opacity .3s;
+	    pointer-events: none;
+	    position: absolute;
+	    width: 100%;
+	}
+
+	body[screen="settings"] #settings {
+	    opacity: 1;
+	}
+
+	.settings-close-button {
+		width: 100%;
+		height:100vh;
+		top:0;
+		left:0;
+		position: absolute;
+		border: 0;
+		background:0;
+		outline:0;
+	    pointer-events: none;
+	    transition: .3s;
+	}
+
+	body[screen="settings"] .settings-close-button {
+	  
+		pointer-events: auto;
+	}
+
+	#settings-content {
+		pointer-events: none;
+	}
+
+	body[screen="settings"] #settings-content {
+	    pointer-events: auto;
+	}
+
+	.themes {
+		width: 240px;
+	}
+
+	.themes button {
+	    border-radius: 8px;
+
+	    border-radius: 50%;
+	    border: none;
+	    font-size: 1.25em;
+	    width: 54px;
+	    height: 54px;
+	    text-align: center;
+	    margin: .2em .2em .4em .2em;
+	    transition: transform .3s;
+	    padding: 0;
+	    cursor: pointer;
+	    border: 2px solid #fff;
+	    outline:0;
+	}
+
+	.themes button:hover {
+	    transform: scale(1.125);
+	}
+
+
+
+	body[theme="black"], #theme-btn-black {
+		background: #141516;
+	}
+
+	body[theme="magenta"], #theme-btn-magenta {
+		background: #ed1e79;
+	}
+
+	body[theme="grey"], #theme-btn-grey {
+		background: #607d8b;
+	}
+
+	body[theme="blueberry"], #theme-btn-blueberry {
+		background: #a700a5;
+	}
+
+	body[theme="teal"], #theme-btn-teal {
+		background: #00ad98;
+	}
+
+	body[theme="blue"], #theme-btn-blue {
+		background: #004191;
+	}
+
+	body[theme="green"], #theme-btn-green {
+		background: #38a340;
+	}
+
+
+	body[theme="black"] #theme-btn-black,
+	body[theme="magenta"] #theme-btn-magenta,
+	body[theme="teal"] #theme-btn-teal,
+	body[theme="blueberry"] #theme-btn-blueberry,
+	body[theme="grey"] #theme-btn-grey,
+	body[theme="blue"] #theme-btn-blue
+	{
+	    box-shadow: 0px 0px 2px 2px #fff;
+	}
+
+
+	/* Light Mode Button Styles
+	--------------------------- */ 
+
+	.audio-button {
+		background:0;
+	    border: 0;
+	    cursor: pointer;
+	    height: 32px;
+	    width: 74px;
+	    position: relative;
+	    border: 1px solid rgba(255,255,255,0);
+	    margin-bottom: 4em;
+	}
+
+	.audio-button:focus {
+		outline:none; /* Not ideal for accessibility */
+	}
+
+	.audio-button span:nth-child(1) {
+		position: absolute;
+		top:0;
+	    left:0;
+	    width: 74px;
+	    height:32px;
+	    border: 2px solid #fff;
+	    border-radius: 25px;
+	    transition: .3s;
+	}
+
+	.audio-button span:nth-child(2) {
+		position: absolute;
+		top:7px;
+	    width: 22px;
+	    height: 22px;
+	    background-color: #fff;
+	    border-radius: 50%;
+	    transition: .3s;
+	    left: 49px;
+	}
+
+    body[audio=off] .audio-button span:nth-child(2) {
+	    left: 6px;
+	}
+
+	.audio-on-text {
+		border-bottom: 1px solid #fff;
+	}
+
+	body[audio=off] .audio-off-text {
+		border-bottom: 1px solid #fff;
+		/*text-decoration: underline;*/
+	}
+
+	body[audio=off] .audio-on-text {
+		border-bottom: 0;
+		/*text-decoration: underline;*/
+	}
+
+
+
+	.close-settings-button {
+		background: 0;
+		border: 0;
+		color: #fff;
+		margin-top: 2.5em;
+		font-size: 1.125em;
+		font-weight: 400;
+		transition: opacity .3s;
+		cursor: pointer;
+		padding: .5em 1em;
+		border: 1px solid rgba(255,255,255,0);
+		border-radius: 8px;
+		outline: 0;
+	}
+
+	.close-settings-button:hover {
+		opacity: .5;
+		/*transform: scale(1.125);*/
+	}
+
+	.close-settings-button:focus {
+		border: 1px solid rgba(255,255,255,1);
+		/*transform: scale(1.125);*/
+	}
+
+				
+</style>
+	
+	
+</head>
+    <body>
+
+    	<button onclick="toggle_settings()" value="settings" aria-label="Settings" id="settings-button">
+            <svg>
+                <use xlink:href="#icon-settings"></use>
+            </svg>
+        </button>
+
+		<div class="container" id="app">
+			<header>
+				<h1>Decision Maker Pro</h1>
+			</header>
+			<ul class="answers">
+				<li id="option_0">Definitely</li>
+				<li id="option_1">Never</li>
+				<li id="option_2">Why Not</li>
+				<li id="option_3">Possibly</li>
+				<li id="option_4">Ask Again</li>
+				<li id="option_5">Forget It</li>
+			</ul>
+			<button onclick="ask()" title="Ask" id="ask-button">
+				Ask
+			</button>
+			<footer>
+				<p>
+					<a href="https://henryegloff.com">&copy; Henry Egloff</a> 
+					<a href="https://www.buymeacoffee.com/henryegloff">Buy me a coffee &hearts;</a>
+				</p>
+				<p class="disclaimer">* May not lead to good decisions</p>
+			</footer>
+		</div>
+
+	    <button class="settings-close-button" onclick="toggle_settings()" aria-label="Toggle Settings"></button>
+
+	    <div class="container" id="settings">
+	    	<div id="settings-content">
+		    	<h2>Audio <span class="audio-on-text">On</span> / <span class="audio-off-text">Off</span></h2>
+
+		    	<button 
+		    		class="audio-button" aria-label="Toggle Audio" onclick="toggle_audio()">
+			    	<span></span>
+			    	<span></span>
+			    </button> 
+
+		    	<div class="themes">
+
+		    		<button id="theme-btn-black" 
+	                	name="colour" value="black" onclick="switchTheme(this)" aria-label="Black">
+	                </button>
+
+	                <button id="theme-btn-magenta" 
+	                    name="colour" value="magenta" onclick="switchTheme(this)" aria-label="Magenta">
+	                </button>
+
+	                <button id="theme-btn-grey" 
+	                    name="colour" value="grey" onclick="switchTheme(this)" aria-label="Grey">
+	                </button>
+
+	                <button id="theme-btn-blueberry" 
+	                    name="colour" value="blueberry" onclick="switchTheme(this)" aria-label="Blueberry">
+	                </button>
+
+	                 <button id="theme-btn-teal" 
+	                    name="colour" value="teal" onclick="switchTheme(this)" aria-label="Teal">
+	                </button>
+
+	                <button id="theme-btn-blue" 
+	                    name="colour" value="blue" onclick="switchTheme(this)" aria-label="Blue">
+	                </button>
+
+		    	</div>
+
+		    	<button class="close-settings-button" onclick="toggle_settings()" aria-label="Back">
+	                <- Back
+	            </button>
+
+		    </div>
+	    </div>
+
+		<svg version="1.1" xmlns="http://www.w3.org/2000/svg" style="position: absolute; width: 0; height: 0;" width="0" height="0">
+	        <defs>
+	            <symbol id="icon-settings" viewBox="0 0 24 24">
+	                <title>Settings</title>
+	                <path d="M19.14,12.94c0.04-0.3,0.06-0.61,0.06-0.94c0-0.32-0.02-0.64-0.07-0.94l2.03-1.58c0.18-0.14,0.23-0.41,0.12-0.61 l-1.92-3.32c-0.12-0.22-0.37-0.29-0.59-0.22l-2.39,0.96c-0.5-0.38-1.03-0.7-1.62-0.94L14.4,2.81c-0.04-0.24-0.24-0.41-0.48-0.41 h-3.84c-0.24,0-0.43,0.17-0.47,0.41L9.25,5.35C8.66,5.59,8.12,5.92,7.63,6.29L5.24,5.33c-0.22-0.08-0.47,0-0.59,0.22L2.74,8.87 C2.62,9.08,2.66,9.34,2.86,9.48l2.03,1.58C4.84,11.36,4.8,11.69,4.8,12s0.02,0.64,0.07,0.94l-2.03,1.58 c-0.18,0.14-0.23,0.41-0.12,0.61l1.92,3.32c0.12,0.22,0.37,0.29,0.59,0.22l2.39-0.96c0.5,0.38,1.03,0.7,1.62,0.94l0.36,2.54 c0.05,0.24,0.24,0.41,0.48,0.41h3.84c0.24,0,0.44-0.17,0.47-0.41l0.36-2.54c0.59-0.24,1.13-0.56,1.62-0.94l2.39,0.96 c0.22,0.08,0.47,0,0.59-0.22l1.92-3.32c0.12-0.22,0.07-0.47-0.12-0.61L19.14,12.94z M12,15.6c-1.98,0-3.6-1.62-3.6-3.6 s1.62-3.6,3.6-3.6s3.6,1.62,3.6,3.6S13.98,15.6,12,15.6z" />
+	            </symbol>
+	        </defs>
+	    </svg>	
+			
+		<script>
+			
+		const _0x4884=['hostname','2gSWYPs','register','Thinking...','then','Why\x20Not','log','248798vVUJgh','setItem','BODY','The\x20answer\x20is:\x20','ServiceWorker\x20registration\x20failed:\x20','service-worker.js','enabled','5HDnWot','ask-button','app','state','disabled','play','Definitely','theme','option_1','settings','blur','option_2','https://henryegloff.com/decision-maker/audio-blip.mp3','option_0','Forget\x20It','random','113EgDwur','selected','option_4','getElementById','549584QrAYcn','storage','audio','A\x20decision\x20has\x20been\x20reached.','setAttribute','885072Axpfeh','getAttribute','henryegloff.com','getItem','794701phStCu','off','7739DqoQqn','Ask\x20Again','scope','value','Possibly','screen','option_','serviceWorker','option_3','option_5','addEventListener','load','ServiceWorker\x20registration\x20successful\x20with\x20scope:\x20','465894xkmmeX','76819xxynJe'];const _0x47cf=function(_0x359869,_0x287567){_0x359869=_0x359869-0x8f;let _0x4884c7=_0x4884[_0x359869];return _0x4884c7;};const _0x342b9a=_0x47cf;(function(_0x3ecf3c,_0x4ded36){const _0x381a22=_0x47cf;while(!![]){try{const _0x82a35e=-parseInt(_0x381a22(0xc2))+-parseInt(_0x381a22(0xa9))*-parseInt(_0x381a22(0x9a))+parseInt(_0x381a22(0xc6))+parseInt(_0x381a22(0xb9))*parseInt(_0x381a22(0xc8))+-parseInt(_0x381a22(0x99))+parseInt(_0x381a22(0xbd))+-parseInt(_0x381a22(0x9c))*parseInt(_0x381a22(0xa2));if(_0x82a35e===_0x4ded36)break;else _0x3ecf3c['push'](_0x3ecf3c['shift']());}catch(_0x46ba32){_0x3ecf3c['push'](_0x3ecf3c['shift']());}}}(_0x4884,0xb8295));let app=document['getElementsByTagName'](_0x342b9a(0xa4))[0x0],ruminating=![],rumination_cycles=0x0,the_decision=0x0,decision_number=0x0,timer=0x14,decision_options=[_0x342b9a(0xaf),'Never',_0x342b9a(0xa0),_0x342b9a(0x90),_0x342b9a(0xc9),_0x342b9a(0xb7)];function consider_decision_options(){const _0x3f503b=_0x342b9a;decision_number=Math['floor'](Math[_0x3f503b(0xb8)]()*decision_options['length']);let _0x5ba1ef=decision_options[decision_number];return _0x5ba1ef;}function ask(){const _0x15643e=_0x342b9a;!ruminating&&(rumination_cycles=Math[_0x15643e(0xb8)]()*0x28+0xa,ruminating=!![],timer=0x64,console[_0x15643e(0xa1)](_0x15643e(0x9e)),ruminate());}function ruminate(){ruminating&&setTimeout(function(){const _0xbd8102=_0x47cf;potential_decision=consider_decision_options(),document[_0xbd8102(0xbc)](_0xbd8102(0xaa))[_0xbd8102(0xc1)](_0xbd8102(0xac),_0xbd8102(0xad)),document[_0xbd8102(0xbc)](_0xbd8102(0xaa))[_0xbd8102(0xb3)](),document['getElementById'](_0xbd8102(0xb6))[_0xbd8102(0xc1)](_0xbd8102(0xac),_0xbd8102(0xc7)),document['getElementById'](_0xbd8102(0xb1))[_0xbd8102(0xc1)](_0xbd8102(0xac),'off'),document[_0xbd8102(0xbc)](_0xbd8102(0xb4))[_0xbd8102(0xc1)](_0xbd8102(0xac),'off'),document[_0xbd8102(0xbc)](_0xbd8102(0x94))[_0xbd8102(0xc1)](_0xbd8102(0xac),'off'),document[_0xbd8102(0xbc)](_0xbd8102(0xbb))[_0xbd8102(0xc1)](_0xbd8102(0xac),_0xbd8102(0xc7)),document[_0xbd8102(0xbc)](_0xbd8102(0x95))['setAttribute'](_0xbd8102(0xac),'off'),document[_0xbd8102(0xbc)](_0xbd8102(0x92)+decision_number)[_0xbd8102(0xc1)](_0xbd8102(0xac),'on'),console[_0xbd8102(0xa1)](potential_decision),rumination_cycles--;let _0x12b83b=new Audio(_0xbd8102(0xb5));localStorage[_0xbd8102(0xbf)]=='on'&&_0x12b83b[_0xbd8102(0xae)](),rumination_cycles<0x8&&(timer+=0x19),rumination_cycles>0x0?ruminate():(ruminating=![],the_decision=potential_decision,show_decision(),document[_0xbd8102(0xbc)](_0xbd8102(0xaa))[_0xbd8102(0xb3)]());},timer);}if(location[_0x342b9a(0x9b)]==_0x342b9a(0xc4)){function show_decision(){const _0x3349b1=_0x342b9a;document[_0x3349b1(0xbc)](_0x3349b1(0x92)+decision_number)[_0x3349b1(0xc1)](_0x3349b1(0xac),_0x3349b1(0xba)),console['log'](_0x3349b1(0xc0)),console[_0x3349b1(0xa1)](_0x3349b1(0xa5)+the_decision);let _0x458cb5=new Audio('https://henryegloff.com/decision-maker/audio-ting.mp3');localStorage[_0x3349b1(0xbf)]=='on'&&_0x458cb5[_0x3349b1(0xae)](),document[_0x3349b1(0xbc)](_0x3349b1(0xaa))[_0x3349b1(0xc1)](_0x3349b1(0xac),_0x3349b1(0xa8));}}function toggle_settings(){const _0x305884=_0x342b9a;app[_0x305884(0xc3)](_0x305884(0x91))=='settings'?app['setAttribute']('screen',_0x305884(0xab)):(app['setAttribute']('screen',_0x305884(0xb2)),document[_0x305884(0xbc)]('settings-button')[_0x305884(0xb3)]());}function switchTheme(_0x27cad2){const _0x196e2e=_0x342b9a;localStorage[_0x196e2e(0xa3)](_0x196e2e(0xb0),_0x27cad2[_0x196e2e(0x8f)]),app[_0x196e2e(0xc1)]('theme',_0x27cad2[_0x196e2e(0x8f)]);}function updateTheme(){const _0x37a804=_0x342b9a;let _0x16bdf4=localStorage[_0x37a804(0xc5)](_0x37a804(0xb0));app[_0x37a804(0xc1)](_0x37a804(0xb0),_0x16bdf4);}updateTheme();function updateAudio(){const _0x18a738=_0x342b9a;let _0x57245e=localStorage[_0x18a738(0xc5)](_0x18a738(0xbf));app['setAttribute'](_0x18a738(0xbf),_0x57245e);}updateAudio();localStorage['audio']==_0x342b9a(0xc7)?app['setAttribute']('audio',_0x342b9a(0xc7)):(localStorage[_0x342b9a(0xbf)]='on',app[_0x342b9a(0xc1)](_0x342b9a(0xbf),'on'));function toggle_audio(){const _0x219f47=_0x342b9a;localStorage[_0x219f47(0xbf)]=='on'?(localStorage[_0x219f47(0xbf)]='off',app[_0x219f47(0xc1)](_0x219f47(0xbf),_0x219f47(0xc7))):(localStorage[_0x219f47(0xbf)]='on',app[_0x219f47(0xc1)](_0x219f47(0xbf),'on'));}window[_0x342b9a(0x96)](_0x342b9a(0xbe),function(){updateTheme(),updateAudio();},![]);_0x342b9a(0x93)in navigator&&window[_0x342b9a(0x96)](_0x342b9a(0x97),function(){const _0x5f79a9=_0x342b9a;navigator[_0x5f79a9(0x93)][_0x5f79a9(0x9d)](_0x5f79a9(0xa7))[_0x5f79a9(0x9f)](function(_0x2816d7){const _0x1d9247=_0x5f79a9;console[_0x1d9247(0xa1)](_0x1d9247(0x98),_0x2816d7[_0x1d9247(0xca)]);},function(_0x233712){const _0x5146cb=_0x5f79a9;console[_0x5146cb(0xa1)](_0x5146cb(0xa6),_0x233712);});});
+
+		</script>
+    </body>
+</html>

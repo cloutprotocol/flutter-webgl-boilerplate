@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:webgl_flutter/config/screens.dart';
 import 'package:webview_flutter_plus/webview_flutter_plus.dart';
 
-class TronScreen extends StatelessWidget {
-  const TronScreen({Key? key}) : super(key: key);
-  static const String routeName = '/tron';
+class MobileTouchScreen extends StatelessWidget {
+  const MobileTouchScreen({Key? key}) : super(key: key);
+  static const String routeName = '/mobiletouch';
 
   static Route route(){
     return MaterialPageRoute(
-      builder: (_) => TronScreen(),
+      builder: (_) => MobileTouchScreen(),
       settings: RouteSettings(name: routeName),
     );
   }
@@ -17,21 +16,21 @@ class TronScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return const MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: TronScreenView(),
+      home: MobileTouchScreenView(),
     );
   }
 }
 
-class TronScreenView extends StatefulWidget {
-  const TronScreenView({Key? key}) : super(key: key);
+class MobileTouchScreenView extends StatefulWidget {
+  const MobileTouchScreenView({Key? key}) : super(key: key);
 
   @override
-  _TronScreenViewState createState() =>
-      _TronScreenViewState();
+  _MobileTouchScreenViewState createState() =>
+      _MobileTouchScreenViewState();
 }
 
-class _TronScreenViewState
-    extends State<TronScreenView> {
+class _MobileTouchScreenViewState
+    extends State<MobileTouchScreenView> {
   // initialize webview controller
   late WebViewPlusController controller;
   double _height = 1;
@@ -51,10 +50,10 @@ class _TronScreenViewState
               //     style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 10)),
               SizedBox(
                 // height size of screen
-                height: constraints.maxHeight * .85,
+                height: constraints.maxHeight * 1.1,
                 child: WebViewPlus(
                   backgroundColor: Colors.transparent,
-                  initialUrl: 'assets/tron/index.html',
+                  initialUrl: 'assets/touch/index.html',
                   onWebViewCreated: (controller) {
                     this.controller = controller;
                   },
@@ -92,43 +91,43 @@ class _TronScreenViewState
                   javascriptMode: JavascriptMode.unrestricted,
                 ),
               ),
-              Container(
-                height: constraints.maxHeight * .1,
-                child: Row(
-                  children: <Widget>[
-                    //add button
-                    Expanded(
-                      child: GestureDetector(
-                        onTapDown: (TapDownDetails tapDownDetails) {
-                          controller.webViewController.evaluateJavascript('left()');
-                        },
-                        onTapCancel: () {
-                          controller.webViewController.evaluateJavascript('leftoff()');
-                        },
-                        child: RaisedButton(
-                          onPressed: () {},
-                          child: Text('left'),
-                        ),
-                      ),
-                    ),
-                    Expanded(
-                      child: GestureDetector(
-                        // When the child is tapped, show a snackbar
-                        onTapDown: (TapDownDetails tapDownDetails) {
-                          controller.webViewController.evaluateJavascript('right()');
-                        },
-                        onTapCancel: () {
-                          controller.webViewController.evaluateJavascript('rightoff()');
-                        },
-                        child: RaisedButton(
-                          onPressed: () {},
-                          child: Text('Right'),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
+              // Container(
+              //   height: constraints.maxHeight * .1,
+              //   child: Row(
+              //     children: <Widget>[
+              //       //add button
+              //       Expanded(
+              //         child: GestureDetector(
+              //           onTapDown: (TapDownDetails tapDownDetails) {
+              //             controller.webViewController.evaluateJavascript('left()');
+              //           },
+              //           onTapCancel: () {
+              //             controller.webViewController.evaluateJavascript('leftoff()');
+              //           },
+              //           child: RaisedButton(
+              //             onPressed: () {},
+              //             child: Text('left'),
+              //           ),
+              //         ),
+              //       ),
+              //       Expanded(
+              //         child: GestureDetector(
+              //           // When the child is tapped, show a snackbar
+              //           onTapDown: (TapDownDetails tapDownDetails) {
+              //             controller.webViewController.evaluateJavascript('right()');
+              //           },
+              //           onTapCancel: () {
+              //             controller.webViewController.evaluateJavascript('rightoff()');
+              //           },
+              //           child: RaisedButton(
+              //             onPressed: () {},
+              //             child: Text('Right'),
+              //           ),
+              //         ),
+              //       ),
+              //     ],
+              //   ),
+              // ),
             ],
           );
         }),);
